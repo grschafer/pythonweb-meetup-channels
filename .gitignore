@@ -1,0 +1,31 @@
+# File types #
+##############
+*.pyc
+*.swo
+*.swp
+*.swn
+local_settings.py
+
+# Directories #
+###############
+logs/
+data/
+log
+upload/
+static/
+
+# OS-level stuff #
+###############
+.DS_Store
+
+# Testing Artifacts
+.tox
+
+# pip artifacts
+src/*
+
+# backup data
+data/*
+
+#download folder
+vendors/downloads/*
