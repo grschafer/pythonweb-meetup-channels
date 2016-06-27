@@ -1,0 +1,4 @@
+-r requirements.txt
+
+ipython==4.2.0
+ipdb==0.10.1
