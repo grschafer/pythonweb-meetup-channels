@@ -126,7 +126,10 @@ STATIC_URL = '/static/'
 # https://channels.readthedocs.io/en/latest/getting-started.html
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "asgiref.inmemory.ChannelLayer",
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
         "ROUTING": "channels_chat.routing.channel_routing",
     },
 }
