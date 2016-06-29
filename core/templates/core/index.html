@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <header>
+        <h1>Chat</h1>
+    </header>
+    <section>
+        <p>Messages below here</p>
+    </section>
+{% endblock %}
+
+{% block extrafoot %}
+<script>
+// Note that the path doesn't matter right now; any WebSocket
+// connection gets bumped over to WebSocket consumers
+socket = new WebSocket("ws://" + window.location.host + "/chat/");
+socket.onmessage = function(e) {
+    alert(e.data);
+}
+socket.onopen = function() {
+    socket.send("hello world");
+}
+</script>
+{% endblock %}
