@@ -6,19 +6,55 @@
     </header>
     <section>
         <p>Messages below here</p>
+        <input type="text" id="chatbox">
+        <button id="send">Send</button>
     </section>
 {% endblock %}
 
 {% block extrafoot %}
 <script>
-// Note that the path doesn't matter right now; any WebSocket
-// connection gets bumped over to WebSocket consumers
-socket = new WebSocket("ws://" + window.location.host + "/chat/");
-socket.onmessage = function(e) {
-    alert(e.data);
-}
-socket.onopen = function() {
-    socket.send("hello world");
-}
+
+$(document).ready(function() {
+
+    function init() {
+        socket = new WebSocket("ws://" + window.location.host + "/chat/");
+        socket.onmessage = function(e) {
+            addMessage(e.data);
+        }
+        socket.onopen = function(e) {
+            addMessage("Connected!");
+        }
+        socket.onclose = function(e) {
+            alert("Socket closed");
+            addMessage("Disconnected!");
+        }
+        socket.onerror = function(e) {
+            alert("Error: " + e.data);
+            addMessage("Error: " + e.data);
+        }
+    }
+    init();
+
+    $("#send").click(function() {
+        send();
+    })
+    $("#chatbox").bind("keypress", function(e) {
+        var code = e.keyCode || e.which;
+        if (code == 13) {
+            send();
+        }
+    })
+
+    function send() {
+        var data = $("#chatbox").val();
+        socket.send(data);
+        $("#chatbox").val("");
+    }
+    function addMessage(msg) {
+        $("#chatbox").before("<p>" + msg + "</p>");
+    }
+
+});
+
 </script>
 {% endblock %}
