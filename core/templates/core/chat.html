@@ -6,6 +6,7 @@
         <p>Hello {{ request.user.username }}</p>
     </header>
     <section id="draw">
+        <input id="colorPicker" type="color" value="#df4b26">
         <canvas id="canvas" width="600" height="450"></canvas>
     </section>
     <section id="chatHistory">
@@ -30,39 +31,48 @@ $(document).ready(function() {
     var lastX = null;
     var lastY = null;
     var paint;
+    var color = "#df4b26";
     context.strokeStyle = "#df4b26";
     context.lineJoin = "round";
     context.lineWidth = 5;
-    $('#canvas').mousedown(function(e){
+    $('#colorPicker').change(function(e) {
+        color = $(this).val();
+        context.strokeStyle = color;
+    })
+    $('#canvas').on('mousedown touchstart', function(e){
+        e.preventDefault();
         paint = true;
-        lastX = e.pageX - this.offsetLeft;
-        lastY = e.pageY - this.offsetTop;
+        lastX = (e.pageX || e.originalEvent.touches[0].pageX) - this.offsetLeft;
+        lastY = (e.pageY || e.originalEvent.touches[0].pageY) - this.offsetTop;
     });
-    $('#canvas').mousemove(function(e){
+    $('#canvas').on('mousemove touchmove', function(e){
+        e.preventDefault();
         if(paint){
-            var mouseX = e.pageX - this.offsetLeft;
-            var mouseY = e.pageY - this.offsetTop;
-            sendLine(lastX, lastY, mouseX, mouseY);
-            drawLine(lastX, lastY, mouseX, mouseY);
+            var mouseX = (e.pageX || e.originalEvent.touches[0].pageX) - this.offsetLeft;
+            var mouseY = (e.pageY || e.originalEvent.touches[0].pageY) - this.offsetTop;
+            sendLine(lastX, lastY, mouseX, mouseY, color);
+            drawLine(lastX, lastY, mouseX, mouseY, color);
             lastX = mouseX;
             lastY = mouseY;
         }
     });
-    $('#canvas').mouseup(function(e){
+    $('#canvas').on('mouseup touchend', function(e){
+        e.preventDefault();
         paint = false;
     });
     $('#canvas').mouseleave(function(e){
         paint = false;
     });
-    function drawLine(x1, y1, x2, y2) {
+    function drawLine(x1, y1, x2, y2, drawColor) {
+        context.strokeStyle = drawColor;
         context.beginPath();
         context.moveTo(x1, y1);
         context.lineTo(x2, y2);
         context.closePath();
         context.stroke();
     }
-    function sendLine(x1, y1, x2, y2) {
-        data = {x1: x1, y1: y1, x2: x2, y2: y2};
+    function sendLine(x1, y1, x2, y2, drawColor) {
+        data = {x1: x1, y1: y1, x2: x2, y2: y2, color: drawColor};
         send("line", data);
     }
 
@@ -75,11 +85,16 @@ $(document).ready(function() {
         socket = new WebSocket("ws://" + window.location.host + "/chat/{{ room }}");
         socket.onmessage = function(e) {
             var parsed = JSON.parse(e.data);
+            if (parsed.username === username) {
+                return;
+            }
+
             if (parsed.type === "chat") {
                 addMessage(parsed.username, parsed.message, parsed.styles);
             }
             else {
-                drawLine(parsed.message.x1, parsed.message.y1, parsed.message.x2, parsed.message.y2);
+                var pm = parsed.message;
+                drawLine(pm.x1, pm.y1, pm.x2, pm.y2, pm.color);
             }
         }
         socket.onopen = function(e) {
@@ -114,6 +129,7 @@ $(document).ready(function() {
     });
     function sendChat() {
         data = $("#chatBox").val();
+        addMessage(username, data);
         send("chat", data);
         $("#chatBox").val("");
     }

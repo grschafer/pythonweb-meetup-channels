@@ -1,6 +1,9 @@
 canvas {
     border: 1px black solid;
 }
+#colorPicker {
+    display: block;
+}
 #chatHistory {
     border: 1px black solid;
     background: #eee;

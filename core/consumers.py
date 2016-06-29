@@ -5,7 +5,6 @@ from channels.sessions import channel_session, enforce_ordering
 from channels.auth import channel_session_user, channel_session_user_from_http
 
 # - buddy list
-# - drawing? colored usernames
 
 
 # Connected to websocket.connect
