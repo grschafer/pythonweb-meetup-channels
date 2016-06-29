@@ -2,59 +2,13 @@
 
 {% block content %}
     <header>
-        <h1>Chat</h1>
+        <h1>Register</h1>
     </header>
     <section>
-        <p>Messages below here</p>
-        <input type="text" id="chatbox">
-        <button id="send">Send</button>
+        <form method="post" action="/">
+            {% csrf_token %}
+            <label for="chatBox">Pick a username: <input required type="text" name="username" autofocus="autofocus" id="chatBox"></label>
+            <button id="enter">Enter</button>
+        </form>
     </section>
-{% endblock %}
-
-{% block extrafoot %}
-<script>
-
-$(document).ready(function() {
-
-    function init() {
-        socket = new WebSocket("ws://" + window.location.host + "/chat/");
-        socket.onmessage = function(e) {
-            addMessage(e.data);
-        }
-        socket.onopen = function(e) {
-            addMessage("Connected!");
-        }
-        socket.onclose = function(e) {
-            alert("Socket closed");
-            addMessage("Disconnected!");
-        }
-        socket.onerror = function(e) {
-            alert("Error: " + e.data);
-            addMessage("Error: " + e.data);
-        }
-    }
-    init();
-
-    $("#send").click(function() {
-        send();
-    })
-    $("#chatbox").bind("keypress", function(e) {
-        var code = e.keyCode || e.which;
-        if (code == 13) {
-            send();
-        }
-    })
-
-    function send() {
-        var data = $("#chatbox").val();
-        socket.send(data);
-        $("#chatbox").val("");
-    }
-    function addMessage(msg) {
-        $("#chatbox").before("<p>" + msg + "</p>");
-    }
-
-});
-
-</script>
 {% endblock %}

@@ -1,0 +1,65 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <header>
+        <h1>Chat</h1>
+        <p>Hello {{ request.user.username }}</p>
+    </header>
+    <section id="chatHistory">
+    </section>
+    <section>
+        <input type="text" id="chatBox">
+        <button id="send">Send</button>
+    </section>
+{% endblock %}
+
+{% block extrafoot %}
+<script>
+
+$(document).ready(function() {
+
+    var username = "{{ request.user.username|default:"null" }}";
+    function init() {
+        socket = new WebSocket("ws://" + window.location.host + "/chat/");
+        socket.onmessage = function(e) {
+            var parsed = JSON.parse(e.data);
+            addMessage(parsed.username, parsed.message);
+        }
+        socket.onopen = function(e) {
+            addMessage(null, "Connected!", "system");
+        }
+        socket.onclose = function(e) {
+            addMessage(null, "Disconnected!", "system");
+        }
+        socket.onerror = function(e) {
+            alert("Error: " + e.data);
+            addMessage(null, "Error: " + e.data, "system");
+        }
+    }
+    init();
+
+    $("#send").click(function() {
+        send();
+    })
+    $("#chatBox").bind("keypress", function(e) {
+        var code = e.keyCode || e.which;
+        if (code == 13) {
+            send();
+        }
+    })
+
+    function send() {
+        var data = $("#chatBox").val();
+        socket.send(data);
+        $("#chatBox").val("");
+    }
+    function addMessage(sender, msg, styles) {
+        sender = sender || "";
+        styles = styles || "";
+        $('#chatHistory').append('<p class="' + styles + '"><span class="sender">' + sender + '</span> <span class="message">' + msg + '</span></p>');
+    }
+
+});
+
+</script>
+{% endblock %}

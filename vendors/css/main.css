@@ -1,0 +1,24 @@
+#chatHistory {
+    border: 1px black solid;
+    background: #eee;
+    max-width: 600px;
+    display: flex;
+    flex-wrap: wrap;
+}
+#chatHistory p {
+    display: flex;
+    margin: 8px 0px;
+    width: 100%;
+    justify-content: space-around;
+}
+.sender {
+    font-weight: bold;
+    width: 100px;
+    text-align: right;
+}
+.message {
+    width: 480px;
+}
+.system {
+    font-style: italic;
+}
