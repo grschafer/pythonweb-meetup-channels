@@ -9,16 +9,27 @@
     display: flex;
     margin: 8px 0px;
     width: 100%;
-    justify-content: space-around;
+}
+#chatInput {
+    padding-left: 110px;
+}
+hr {
+    border-top: 1px solid black;
+    margin: 0;
+    width: 100%;
 }
 .sender {
     font-weight: bold;
     width: 100px;
     text-align: right;
+    margin-right: 10px;
 }
 .message {
-    width: 480px;
+    width: 490px;
 }
 .system {
     font-style: italic;
+}
+.error {
+    color: red;
 }
