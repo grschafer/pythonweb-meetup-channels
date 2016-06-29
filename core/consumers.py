@@ -4,9 +4,8 @@ from channels import Group
 from channels.sessions import channel_session, enforce_ordering
 from channels.auth import channel_session_user, channel_session_user_from_http
 
-# - join/leave message
 # - buddy list
-# - drawing?
+# - drawing? colored usernames
 
 
 # Connected to websocket.connect
@@ -19,6 +18,13 @@ def ws_connect(message):
     message.channel_session['room'] = room
 
     Group("chat-%s" % room).add(message.reply_channel)
+    Group("chat-%s" % room).send({
+        "text": json.dumps({
+            "username": None,
+            "message": "{} joined".format(message.user.username),
+            "styles": "system",
+        }),
+    })
 
 
 # Connected to websocket.receive
@@ -37,5 +43,13 @@ def ws_message(message):
 # Connected to websocket.disconnect
 @enforce_ordering(slight=True)
 @channel_session
+@channel_session_user
 def ws_disconnect(message):
     Group("chat-%s" % message.channel_session['room']).discard(message.reply_channel)
+    Group("chat-%s" % message.channel_session['room']).send({
+        "text": json.dumps({
+            "username": None,
+            "message": "{} left".format(message.user.username),
+            "styles": "system",
+        }),
+    })
