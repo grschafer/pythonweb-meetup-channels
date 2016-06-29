@@ -11,7 +11,7 @@
     width: 100%;
 }
 #chatInput {
-    padding-left: 110px;
+    /* padding-left: 110px; */
 }
 hr {
     border-top: 1px solid black;
@@ -20,12 +20,14 @@ hr {
 }
 .sender {
     font-weight: bold;
-    width: 100px;
+    /* width: 100px; */
     text-align: right;
     margin-right: 10px;
+    flex: 1;
 }
 .message {
-    width: 490px;
+    /* width: 490px; */
+    flex: 3;
 }
 .system {
     font-style: italic;
