@@ -23,6 +23,7 @@ def ws_connect(message):
             "username": None,
             "message": "{} joined".format(message.user.username),
             "styles": "system",
+            "type": "chat",
         }),
     })
 
@@ -32,10 +33,12 @@ def ws_connect(message):
 @channel_session
 @channel_session_user
 def ws_message(message):
+    payload = json.loads(message['text'])
     Group("chat-%s" % message.channel_session['room']).send({
         "text": json.dumps({
             "username": message.user.username,
-            "message": message['text'],
+            "message": payload['data'],
+            "type": payload['type'],
         }),
     })
 
@@ -51,5 +54,6 @@ def ws_disconnect(message):
             "username": None,
             "message": "{} left".format(message.user.username),
             "styles": "system",
+            "type": "chat",
         }),
     })

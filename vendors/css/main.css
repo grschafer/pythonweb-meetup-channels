@@ -1,3 +1,6 @@
+canvas {
+    border: 1px black solid;
+}
 #chatHistory {
     border: 1px black solid;
     background: #eee;
