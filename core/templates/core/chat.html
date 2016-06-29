@@ -136,7 +136,18 @@ $(document).ready(function() {
     function addMessage(sender, msg, styles) {
         sender = sender || "";
         styles = styles || "";
+        var shouldScroll = false;
+        var el = $('#chatHistory')[0];
+        if (el.scrollTop + el.offsetHeight >= el.scrollHeight) {
+            shouldScroll = true;
+        }
+
+
         $('#chatBottom').before('<p class="' + styles + '"><span class="sender">' + sender + '</span> <span class="message">' + msg + '</span></p>');
+
+        if (shouldScroll) {
+            el.scrollTop = el.scrollHeight;
+        }
     }
 
 });

@@ -10,6 +10,8 @@ canvas {
     max-width: 600px;
     display: flex;
     flex-wrap: wrap;
+    max-height: 300px;
+    overflow-y: scroll;
 }
 #chatHistory p {
     display: flex;
