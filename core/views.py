@@ -24,8 +24,8 @@ def index(request):
     return TemplateResponse(request, 'core/index.html', {})
 
 
-def chat(request):
+def chat(request, room='default'):
     if request.user.is_anonymous():
         return redirect(reverse('index'))
 
-    return TemplateResponse(request, 'core/chat.html', {})
+    return TemplateResponse(request, 'core/chat.html', {'room': room})

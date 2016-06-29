@@ -20,6 +20,7 @@ import core.views
 
 urlpatterns = [
     url(r'^$', core.views.index, name='index'),
-    url(r'^chat/', core.views.chat, name='chat'),
+    url(r'^chat/$', core.views.chat, name='chat'),
+    url(r'^chat/(?P<room>[A-z0-9]+)/$', core.views.chat, name='chat'),
     url(r'^admin/', admin.site.urls),
 ]

@@ -4,8 +4,6 @@ from channels import Group
 from channels.sessions import channel_session
 from channels.auth import channel_session_user, channel_session_user_from_http
 
-# - make a chat/([A-z0-9]) url and page where chat actually happens
-# - routing for chat room
 # - enforce slight ordering
 # - join/leave message
 
@@ -14,7 +12,7 @@ from channels.auth import channel_session_user, channel_session_user_from_http
 @channel_session_user_from_http
 def ws_connect(message):
     # Work out room name from path (ignore slashes)
-    room = message.content['path'].strip("/")
+    room = message.content['path'].strip('/').replace('/', '-')
     # Save room in session and add us to the group
     message.channel_session['room'] = room
 

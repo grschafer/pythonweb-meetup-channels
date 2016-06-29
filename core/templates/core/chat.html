@@ -20,7 +20,7 @@ $(document).ready(function() {
 
     var username = "{{ request.user.username|default:"null" }}";
     function init() {
-        socket = new WebSocket("ws://" + window.location.host + "/chat/");
+        socket = new WebSocket("ws://" + window.location.host + "/chat/{{ room }}");
         socket.onmessage = function(e) {
             var parsed = JSON.parse(e.data);
             addMessage(parsed.username, parsed.message);
