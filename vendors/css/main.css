@@ -18,8 +18,19 @@ canvas {
     margin: 8px 0px;
     width: 100%;
 }
-#chatInput {
-    /* padding-left: 110px; */
+#chatControls {
+    border: 1px black solid;
+    border-top: none;
+    background: #eee;
+    max-width: 600px;
+    display: flex;
+    flex-wrap: wrap;
+}
+#chatBox {
+    flex: 4;
+}
+#send {
+    flex: 1;
 }
 hr {
     border-top: 1px solid black;

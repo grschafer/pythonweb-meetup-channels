@@ -2,7 +2,6 @@
 
 {% block content %}
     <header>
-        <h1>Chat</h1>
         <p>Hello {{ request.user.username }}</p>
     </header>
     <section id="draw">
@@ -10,11 +9,10 @@
         <canvas id="canvas" width="600" height="450"></canvas>
     </section>
     <section id="chatHistory">
-        <hr id="chatBottom">
-        <p id="chatInput">
-            <input type="text" id="chatBox">
-            <button id="send">Send</button>
-        </p>
+    </section>
+    <section id="chatControls">
+        <input type="text" id="chatBox">
+        <button id="send">Send</button>
     </section>
 {% endblock %}
 
@@ -136,14 +134,15 @@ $(document).ready(function() {
     function addMessage(sender, msg, styles) {
         sender = sender || "";
         styles = styles || "";
+
+        // if user is scrolled to the bottom, auto-scroll w/ new messages
         var shouldScroll = false;
         var el = $('#chatHistory')[0];
         if (el.scrollTop + el.offsetHeight >= el.scrollHeight) {
             shouldScroll = true;
         }
 
-
-        $('#chatBottom').before('<p class="' + styles + '"><span class="sender">' + sender + '</span> <span class="message">' + msg + '</span></p>');
+        $('#chatHistory').append('<p class="' + styles + '"><span class="sender">' + sender + '</span> <span class="message">' + msg + '</span></p>');
 
         if (shouldScroll) {
             el.scrollTop = el.scrollHeight;
